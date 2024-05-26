@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link rel="stylesheet" href="/assets/styles/style.css" />
+  </head>
+  <body>
+    <header>
+      <h1>Weather Dashboard</h1>
+    </header>
+    <main>
+      <aside id="search">
+        <h2>Search for a City</h2>
+        <form>
+          <label for="inCity" class="lbl-lg">Search for a City</label>
+          <input
+            type="text"
+            id="inCity"
+            placeholder="Madison"
+            aria-placeholder="Madison"
+          />
+          <button type="submit" id="btnSearch">Search</button>
+        </form>
+      </aside>
+      <div id="weatherContainer">
+      <section id="cardToday">Placeholder</section>
+      <section id="card5day">
+        <h4>5-Day Forecast:</h4>
+      </section>
+    </div>
+    </main>
+    <script type="module" src="/assets/scripts/dashboard.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1.11.3/dayjs.min.js"
+    integrity="sha256-iu/zLUB+QgISXBLCW/mcDi/rnf4m4uEDO0wauy76x7U=" crossorigin="anonymous"></script>
+  </body>
+</html>
