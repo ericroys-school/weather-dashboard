@@ -9,16 +9,23 @@ import {
   getForcast,
   DATETXT,
 } from "./weather.js";
-import { getElement, getValue } from "./helper.js";
+import { CITY } from "./storage.js";
+import { getValue } from "./helper.js";
+import { createEntry, getListEntries } from "./storage.js";
 
 document.getElementById("btnSearch").addEventListener("click", (event) => {
   event.preventDefault();
-  renderCards();
-  //getCoordinates("Evansville, WISCONSIN, US").then((r) => console.log(r))
+  renderCards(getValue("inCity"));
 });
 
-async function renderCards() {
-  let location = getValue("inCity");
+
+/**
+ * Render all the cards for a given location
+ * @param string location name (expect city, state, country code)
+ * @returns 
+ */
+async function renderCards(location) {
+
   if (!location) return;
   let weather = await getForcast(location);
   if (weather) {
@@ -29,7 +36,6 @@ async function renderCards() {
     //iterate the results and render to page
     weather.forEach((d) => {
       let hasToday = false;
-      let i = 1;
 
       //grab the first time slot for today since api will return any slots of the day
       //still remaining (i.e. if now is noon, then will return the afternoon/eve slots)
@@ -42,29 +48,54 @@ async function renderCards() {
         hasToday = true;
         render(true, createCard(d, true));
       }
-      //data goes to forcast cards
-      else if (!isToday(d[DATE]) && d[DATETXT] === "12:00:00") {
-        console.log("*******: " + d[DATETXT] + "    --> " + dayjs(dayjs.unix(d[DATE])).format("MM/DD/YYYY  HH"))
+      //data goes to forcast cards using the 3pm slot (i.e. hotest time of the day usually)
+      else if (!isToday(d[DATE]) && d[DATETXT] === "15:00:00") {
+        // console.log("*******: " + d[DATETXT] + "    --> " + dayjs(dayjs.unix(d[DATE])).format("MM/DD/YYYY  HH"))
         render(false, createCard(d, false));
       }
     });
+
+    //write the city to storage
+    createEntry(weather[0][NAME]);
+    //re-render history list
+    renderHistoryList();
   } else {
-    console.warn("none");
+    let ct = $("#cardToday");
+    ct.empty();
+    ct.text("No city found matching your entry. Please enter full city, status, country code")
   }
 }
 
+/**
+ * check if it's today or not
+ * @param date in milliseconds 
+ * @returns true if today otherwise false
+ */
 function isToday(d){
     return d >= dayjs().startOf("day").unix() &&
     d <= dayjs().endOf("day").unix();
 }
 
+/**
+ * clear the daily weather
+ */
 function clearDaily(){
     $("#cardToday").empty();
 }
+
+/**
+ * Clear the 5 day forcast
+ */
 function clear5Day(){
     $("#container5day").empty();
 }
 
+/**
+ * Render a card to it's proper placeholder
+ * @param boolean isDaily 
+ * @param card object card 
+ * @returns 
+ */
 function render(isDaily, card){
 
     //if we didn't get a valid card just return
@@ -103,3 +134,27 @@ function createCard(data, isDaily) {
   `);
   return card;
 }
+
+function renderHistoryList(){
+   let entries = getListEntries();
+   if(!entries)return;
+   let place = $("#history");
+   place.empty();
+
+   entries.forEach((en) => {
+    let place = $("#history");
+    place.append(`<button data-name="${en[CITY]}" class="btn-history">${en[CITY]}</button>`);
+   })
+}
+
+$(document).ready(function () {
+    renderHistoryList();
+});
+
+let h = $("#history").on('click', '.btn-history', (e)=>{
+    
+    let c = $(e.target).attr('data-name');
+    console.log(c);
+    console.log(Intl.DateTimeFormat().resolvedOptions().timeZone)
+    renderCards(c);
+})
