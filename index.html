@@ -12,15 +12,16 @@
     </header>
     <main>
       <aside id="search">
-        <h2>Search for a City</h2>
         <form>
           <label for="inCity" class="lbl-lg">Search for a City</label>
-          <input
+          <textarea
             type="text"
             id="inCity"
             placeholder="Madison"
             aria-placeholder="Madison"
-          />
+            rows="2"
+            cols="40"
+          >Madison, Wisconsin, US</textarea>
           <button type="submit" id="btnSearch">Search</button>
         </form>
       </aside>
@@ -28,6 +29,7 @@
       <section id="cardToday">Placeholder</section>
       <section id="card5day">
         <h4>5-Day Forecast:</h4>
+        <div id="container5day"></div>
       </section>
     </div>
     </main>

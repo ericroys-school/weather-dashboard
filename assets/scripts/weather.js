@@ -6,6 +6,7 @@ const ICONURI = "https://openweathermap.org/img/wn/";
 
 export const NAME = "location";
 export const DATE = "dt";
+export const DATETXT = "dtext";
 export const WIND = "wind";
 export const TEMP = "temp";
 export const HUM = "humidity";
@@ -117,6 +118,7 @@ function formatResponse(res, name){
     x[ICON] = ICONURI + r.weather[0].icon + ".png";
     console.log("ICON: " + x[ICON])
     x[DESC] = r.weather.main;
+    x[DATETXT] = r.dt_txt.split(" ")[1].trim();
     w.push(x);
   });
   console.log(`KDJKJDKJDK ${w.length}`);
