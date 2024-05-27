@@ -104,10 +104,10 @@ async function getWeather(lat, lon, name) {
  * @param string name
  */
 function formatResponse(res, name){
-  console.log("frmres");
+
   if(!res) return;
   let w = [];
-  console.log(`RESLIST:  ${res.list.length}`)
+  // console.log(`RESLIST:  ${res.list.length}`)
   res.list.forEach((r)=> {
     let x = {};
     x[NAME] = name;
@@ -116,11 +116,11 @@ function formatResponse(res, name){
     x[TEMP] = r.main.temp;
     x[HUM] = r.main.humidity;
     x[ICON] = ICONURI + r.weather[0].icon + ".png";
-    console.log("ICON: " + x[ICON])
+    // console.log("ICON: " + x[ICON])
     x[DESC] = r.weather.main;
     x[DATETXT] = r.dt_txt.split(" ")[1].trim();
     w.push(x);
   });
-  console.log(`KDJKJDKJDK ${w.length}`);
+
   return w;
 }
