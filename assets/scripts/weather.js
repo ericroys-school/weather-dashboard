@@ -3,6 +3,8 @@ const GEOBASE = `http://api.openweathermap.org/geo/1.0/direct?q={{QUERY}}${APIKE
 const WBASE = "http://api.openweathermap.org/data/2.5/forecast?";
 const WEATHER = `${WBASE}lat={{LAT}}&lon={{LON}}&units=imperial${APIKEY}`;
 const ICONURI = "https://openweathermap.org/img/wn/";
+dayjs.extend(window.dayjs_plugin_utc);
+dayjs.extend(window.dayjs_plugin_timezone);
 
 export const NAME = "location";
 export const DATE = "dt";
@@ -34,7 +36,7 @@ export async function getForcast(location) {
   //get the coordinates for a location
   let coordinates = await getCoordinates(location);
   if (!coordinates) return null;
-  console.log("11111")
+
   //get the forcast for the location
   return getWeather(coordinates.lat, coordinates.lon, location);
 }
@@ -51,24 +53,24 @@ export async function getCoordinates(location) {
     let res = await fetch(getGeoEnpoint(location));
     if (res.status !== 200) {
       let msg = `error: geo city search: ${res.statusText}`;
-      console.log(msg);
+      console.error(msg);
       throw msg;
     }
     let geo = await res.json();
     // console.log(geo);
     if (!geo || (Array.isArray(geo) && geo.length < 1)) {
-      console.log(`no results for location ${location}`);
+      console.warn(`no results for location ${location}`);
       return;
     }
     if (!Array.isArray(geo)) {
-      console.log("warn: expected geo to return array!");
+      console.warn("warn: expected geo to return array!");
       return;
     }
     let r = {
       lat: geo[0].lat,
       lon: geo[0].lon,
     };
-    console.log("Returning: " + JSON.stringify(r));
+    // console.log("Returning: " + JSON.stringify(r));
     return r;
   } catch (err) {
     console.error(err);
@@ -90,7 +92,7 @@ async function getWeather(lat, lon, name) {
     let res = await fetch(getWeatherEndpoint(lat, lon));
     if (res.status !== 200) {
       let msg = `error: weather fetch: ${res.statusText}`;
-      console.log(msg);
+      // console.log(msg);
       throw msg;
     }
     return formatResponse(await res.json(), name);
@@ -107,7 +109,6 @@ function formatResponse(res, name){
 
   if(!res) return;
   let w = [];
-  // console.log(`RESLIST:  ${res.list.length}`)
   res.list.forEach((r)=> {
     let x = {};
     x[NAME] = name;
@@ -117,8 +118,13 @@ function formatResponse(res, name){
     x[HUM] = r.main.humidity;
     x[ICON] = ICONURI + r.weather[0].icon + ".png";
     // console.log("ICON: " + x[ICON])
-    x[DESC] = r.weather.main;
-    x[DATETXT] = r.dt_txt.split(" ")[1].trim();
+    x[DESC] = r.weather[0].main;
+    x[DATETXT] = dayjs(dayjs.unix(r.dt)).format("MM/DD/YYYY HH:mm:ss").split(" ")[1].trim();
+  //   console.log("00000000: " + dayjs.utc().isUTC())
+  //   console.log(`_____ ${dayjs(dayjs.unix(r.dt)).format("MM/DD/YYYY HH:mm:ss")}
+  //   ${r.main.temp}  -----> ${r.dt_txt}
+  // `);
+  // console.log(`-----> ${x[DATETXT]}`)
     w.push(x);
   });
 

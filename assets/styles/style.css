@@ -6,12 +6,14 @@
     --mb: 1em;
 }
 
+/** univeral application of font fam, margin, padding **/
 * {
     font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
     margin:0;
     padding:0;
 }
 
+/* style the header */
 header {
     display: flex;
     width: 100%;
@@ -35,18 +37,19 @@ main {
     min-width: 15%;
 }
 
-/* form {
-    width: 115px;
-} */
+/** style the search container **/
 aside {
     flex-direction: column;
     margin-left: var(--ml);
     margin-top: var(--mt);
     width: 115px;
-    /* max-width: 15%; */
     min-width: 15%;
 }
 
+/** using text area instead of standard input because
+    offers user a chance to make it bigger if needed
+    while also having similar style
+**/
 textarea {
     margin-top: var(--mt);
     max-width: 98%;
@@ -61,29 +64,37 @@ p {
     margin-bottom: var(--mb);
 }
 
+/** for all the buttons **/
 button {
     width: 100%;
     color: white; 
     background-color: gray;
     border-radius: 5px;
-    height: 25px;
+    /* height: 25px;
+    max-height: 45px; */
     margin-bottom: var(--mb);
+    padding: 5px;
     border: 0px;
 }
 
+/** for all the buttons to hover **/
 button:hover, button:focus{
     color:black;
     font-weight: bolder;
 }
 
+/** give padding and top border to history container **/
 #history {
     border-top: 2px solid gray;
     padding-top: 5px;
 }
+
+/** specific style for search button **/
 #btnSearch {
     background-color: rgb(92,140,221);
 }
 
+/** style for the daily and forcast container **/
 #weatherContainer {
     flex-direction: column;
     margin-top: var(--mt);
@@ -92,37 +103,46 @@ button:hover, button:focus{
     margin-left: var(--ml);
 }
 
+/* for just the daily card container */
 #cardToday {
     border: .5px solid black;
     margin-left: var(--ml);
     flex-direction: column;
     max-width: 85%;
-    height: 150px;
+    min-height: 150px;
 } 
 
+/* margin for 5 day cards */
 #card5day {
     margin-top: var(--mt);
     margin-left: var(--ml);
 }
 
+/* little extra margin for the 5 day card header */
 #card5day h4{
     margin-top: var(--mt);
 }
 
+/* padding/margin for all card */
 .card {
     padding: 5px;
     margin: 4px;
 }
 
+/* height for daily card */
 .card .daily {
     max-height: 200px;
 }
 
+/* a large label for the city input */
 .lbl-lg {
     font-size: large;
     font-weight: bold;
 }
 
+/* forecast card styling to support 
+   different background, etc
+*/
 .forecast {
     background-color: rgb(46,60,77);
     color: white;
@@ -131,19 +151,27 @@ button:hover, button:focus{
     min-width: 17%;
 }
 
+/* forecast container styling */
 #container5day {
     max-width:90%;
     display: flex;
     flex-wrap: wrap;
 }
 
-.icon {
+/* size the icon appropriately */
+p .icon {
     width: 25px;
     height: 25px;
 }
+span .icon {
+    float:right;
+    width: 40px;
+    height: 40px;
+}
 
+/* bigger, bolder card title */
 .card-title {
     font-size: large;
     font-weight: bold;
-    width: 75%;
+    width: 50%;
 }

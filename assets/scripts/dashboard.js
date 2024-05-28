@@ -13,6 +13,8 @@ import { CITY } from "./storage.js";
 import { getValue } from "./helper.js";
 import { createEntry, getListEntries } from "./storage.js";
 
+
+
 document.getElementById("btnSearch").addEventListener("click", (event) => {
   event.preventDefault();
   renderCards(getValue("inCity"));
@@ -32,10 +34,10 @@ async function renderCards(location) {
 
     //clean up any cached leftovers
     clear5Day();
-
+    let hasToday = false;
     //iterate the results and render to page
     weather.forEach((d) => {
-      let hasToday = false;
+      
 
       //grab the first time slot for today since api will return any slots of the day
       //still remaining (i.e. if now is noon, then will return the afternoon/eve slots)
@@ -44,13 +46,15 @@ async function renderCards(location) {
         isToday(d[DATE]) &&
         !hasToday
       ) {
+        // console.log("***Daily****: " + d[DATETXT]);
         clearDaily();
         hasToday = true;
         render(true, createCard(d, true));
       }
+      
       //data goes to forcast cards using the 3pm slot (i.e. hotest time of the day usually)
-      else if (!isToday(d[DATE]) && d[DATETXT] === "15:00:00") {
-        // console.log("*******: " + d[DATETXT] + "    --> " + dayjs(dayjs.unix(d[DATE])).format("MM/DD/YYYY  HH"))
+      else if (!isToday(d[DATE]) && d[DATETXT] === "16:00:00") {
+        //  console.log("*******: " + d[DATETXT] + "    --> " + dayjs(dayjs.unix(d[DATE])).format("MM/DD/YYYY  HH"))
         render(false, createCard(d, false));
       }
     });
@@ -106,9 +110,14 @@ function render(isDaily, card){
     place.append(card);
 }
 
+/**
+ * Build an individual card element
+ * @param weather object data 
+ * @param boolean isDaily true for daily card otherwise for forecast card
+ * @returns a card element
+ */
 function createCard(data, isDaily) {
   if (!data) return null;
-    console.log("DAILY: " + isDaily);
 
   //icon tag definition
   let ico = `<img class="icon" src="${data[ICON]}" alt="${data[DESC]}"/>`
@@ -135,6 +144,10 @@ function createCard(data, isDaily) {
   return card;
 }
 
+/**
+ * Renders the buttons for the history list
+ * @returns 
+ */
 function renderHistoryList(){
    let entries = getListEntries();
    if(!entries)return;
@@ -147,14 +160,16 @@ function renderHistoryList(){
    })
 }
 
+/** load the history when page loads */
 $(document).ready(function () {
     renderHistoryList();
 });
 
+/**
+ * add btn click handler for the history buttons
+ */
 let h = $("#history").on('click', '.btn-history', (e)=>{
     
     let c = $(e.target).attr('data-name');
-    console.log(c);
-    console.log(Intl.DateTimeFormat().resolvedOptions().timeZone)
     renderCards(c);
 })
