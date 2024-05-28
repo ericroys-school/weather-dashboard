@@ -112,6 +112,11 @@ button:hover, button:focus{
     min-height: 150px;
 } 
 
+/** space out the message text **/
+#cardToday p {
+    margin-left: var(--ml);
+}
+
 /* margin for 5 day cards */
 #card5day {
     margin-top: var(--mt);
@@ -164,7 +169,8 @@ p .icon {
     height: 25px;
 }
 span .icon {
-    float:right;
+    position: relative;
+    top:    12px;
     width: 40px;
     height: 40px;
 }
