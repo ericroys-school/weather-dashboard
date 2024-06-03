@@ -1,6 +1,6 @@
 const APIKEY = "&APPID=7e72072283008043ee9f02c4250ba02a";
-const GEOBASE = `http://api.openweathermap.org/geo/1.0/direct?q={{QUERY}}${APIKEY}&limit=1`;
-const WBASE = "http://api.openweathermap.org/data/2.5/forecast?";
+const GEOBASE = `https://api.openweathermap.org/geo/1.0/direct?q={{QUERY}}${APIKEY}&limit=1`;
+const WBASE = "https://api.openweathermap.org/data/2.5/forecast?";
 const WEATHER = `${WBASE}lat={{LAT}}&lon={{LON}}&units=imperial${APIKEY}`;
 const ICONURI = "https://openweathermap.org/img/wn/";
 dayjs.extend(window.dayjs_plugin_utc);
